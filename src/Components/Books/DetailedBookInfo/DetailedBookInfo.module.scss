@@ -1,0 +1,54 @@
+.main {
+  display: grid;
+  justify-content: center;
+  margin-top: 10px;
+
+  .bookInfoBlock {
+    display: grid;
+    grid-template-columns: 400px 550px;
+    background-color: #fff;
+
+    .imgBlock {
+      background-color: rgb(227, 227, 227);
+
+      img {
+        height: 280px;
+        width: 200px;
+        margin: 50px 60px;
+        box-shadow: 8px 7px 17px 1px #767676;
+      }
+    }
+
+    .descriptionBlock {
+      text-align: left;
+      margin-top: 20px;
+      margin-left: 20px;
+      width: 500px;
+
+      .authors {
+        font-size: 14px;
+        color: rgb(146, 146, 146);
+      }
+
+      h3 {
+        margin: 10px 0;
+      }
+
+      span {
+        margin: 3px 0 7px 0;
+        color: rgb(146, 146, 146);
+
+        &:nth-child(3) {
+          border-bottom: 1px solid rgb(92, 92, 93);
+        }
+      }
+
+      .description {
+        border: #cacaca 1px solid;
+        margin: 15px 0;
+        padding: 10px;
+
+      }
+    }
+  }
+}

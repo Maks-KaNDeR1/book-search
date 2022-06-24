@@ -1,0 +1,95 @@
+.main {
+    min-width: 1300px;
+    margin-top: 10px;
+
+    h3 {
+        margin: 0 50px 0 50px;
+        padding: 10px 0 20px 0;
+        background-color: #fff;
+        font-weight: 400;
+    }
+
+    .booksBlock {
+        display: grid;
+        grid-template-columns: 230px 230px 230px 230px 230px;
+        justify-content: space-around;
+        margin: 0 50px 0 50px;
+
+        background-color: #fff;
+
+        .bookItem {
+            margin: 10px;
+            text-align: start;
+
+            background-image: linear-gradient(to right, rgb(245, 245, 245) 0%, rgb(223, 223, 223) 51%, #afafaf 100%);
+            background-size: 200% auto;
+            transition: .5s;
+
+            a {
+
+                img {
+                    height: 170px;
+                    width: 130px;
+                    margin: 20px 20px 10px 40px;
+                    cursor: pointer;
+                    transition: .35s ease;
+                }
+
+                :hover {
+                    box-shadow: 0px 3px 5px 2px #767676;
+                }
+            }
+
+            :hover {}
+
+            .title {
+                margin: 5px;
+            }
+
+            .authors {
+                margin: 5px;
+                font-size: small;
+                color: rgb(92, 92, 93);
+            }
+
+            span {
+                margin: 5px;
+                font-size: small;
+                color: rgb(92, 92, 93);
+                border-bottom: 1px solid rgb(158, 158, 158);
+            }
+            div {
+                &:nth-child(2) {}
+
+                :hover {
+                    transform: scale(1.02);
+                }
+            }
+
+            :hover {
+                transform: none
+            }
+        }
+
+        :hover {
+            transform: scale(1.02);
+        }
+    }
+
+    .buttonItem {
+        background-color: rgba(255, 255, 255, 0.89);
+        min-width: 1000px;
+        margin: 0px 50px 0 50px;
+        padding: 50px;
+        opacity: 0.7;
+
+        button {
+            border: none;
+            height: 40px;
+            width: 200px;
+            background-color: rgb(176, 176, 176);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+.select {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+
+  div {
+    margin: 5px;
+    color: #fff;
+
+    select {
+      position: relative;
+      border: none;
+      outline: none;
+      color: rgb(123, 123, 123);
+      font-size: 20px;
+      height: 25px;
+      margin-left: 6px;
+      width: 150px;
+    }
+  }
+}

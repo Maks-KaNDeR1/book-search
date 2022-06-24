@@ -1,0 +1,27 @@
+.search {
+  text-align: center;
+  min-width: 1200px;
+
+  h1 {
+    color: #fff;
+  }
+
+  input {
+    position: relative;
+    border: none;
+    outline: none;
+    font-size: 20px;
+
+    height: 25px;
+    margin: 2px;
+    width: 380px;
+  }
+
+  i {
+    position: absolute;
+    margin-left: -25px;
+    margin-top: 6px;
+    cursor: pointer;
+  }
+
+}
