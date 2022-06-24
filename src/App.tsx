@@ -3,6 +3,36 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
+
+  const dispatch = useDispatch<any>()
+
+  let [value, setValue] = useState('')
+  let [sorting, setSorting] = useState(sort[1])
+
+  useEffect(() => {
+      dispatch(requestBooks(value, sorting))
+  }, [dispatch, sorting])
+
+
+  if (!booksReducer.books) {
+    return <div style={item} >
+      <Main />
+      <span style={titleStyle}  > Nothing was found </span>
+    </div>
+  }
+
+  if (booksReducer.books.length === 0) {
+    return <div style={item} >
+      <Main />
+    </div>
+  }
+
+
+
+
+
   return (
     <div className="App">
       <header className="App-header">
