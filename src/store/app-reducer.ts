@@ -1,7 +1,8 @@
-import { requestBooks } from "./books-reducer";
 
 const initialState = {
-    initialized: true
+    initialized: true,
+    errorCode: 0,
+    error: ''
 };
 
 
@@ -10,10 +11,13 @@ type AppReducerType = typeof initialState
 export const appReducer = (state: AppReducerType = initialState, action: AppActionsType): AppReducerType => {
     switch (action.type) {
         case 'APP/INITIALIZED_SUCCESS': {
-            return {
-                ...state,
-                initialized: action.status
-            }
+            return { ...state, initialized: action.status }
+        }
+        case 'APP/ERROR_CODE': {
+            return { ...state, errorCode: action.code }
+        }
+        case 'APP/ERROR_MESSAGE': {
+            return { ...state, error: action.error }
         }
         default:
             return state;
@@ -21,21 +25,21 @@ export const appReducer = (state: AppReducerType = initialState, action: AppActi
 };
 
 
-
-// export const initializedSuccess = () => ({ type: 'INITIALIZED_SUCCESS' } as const)
-
-// export const initializeApp = () => async (dispatch: any) => {
-//     let promise = dispatch(requestBooks())
-//     Promise.all([promise])
-//     dispatch(initializedSuccess())
-// }
-
-
 export const initializedSuccess = (status: boolean) =>
     ({ type: 'APP/INITIALIZED_SUCCESS', status } as const)
 
-type InitializedSuccessType = ReturnType<typeof initializedSuccess>
+export const errorCode = (code: number) =>
+    ({ type: 'APP/ERROR_CODE', code } as const)
 
-export type AppActionsType = InitializedSuccessType
+export const errorMessage = (error: string) =>
+    ({ type: 'APP/ERROR_MESSAGE', error } as const)
+
+
+
+type InitializedSuccessType = ReturnType<typeof initializedSuccess>
+type ErrorCodeType = ReturnType<typeof errorCode>
+type ErrorMessageType = ReturnType<typeof errorMessage>
+
+export type AppActionsType = InitializedSuccessType | ErrorMessageType | ErrorCodeType
 
 export default appReducer

@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './App.module.scss';
-import { Books } from './Components/Books/Books';
-import { Navigate, Route, Routes } from 'react-router-dom';
 import { Main } from './Components/Main/Main';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AppRootStateType } from './store/store';
-import { BooksReducerType, requestBooks } from './store/books-reducer';
-import { Preloader } from './Components/common/Preloader/Preloader';
-import { DetailedBookInfo } from './Components/Books/DetailedBookInfo/DetailedBookInfo';
+import { BooksReducerType } from './store/books-reducer';
+import { ErrorSnackbar } from './Components/ErrorSnackbar/ErrorSnackbar';
 
 
 function App() {
 
   const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
-  const initialized = useSelector<AppRootStateType>(state => state.app.initialized)
-
-
-  const dispatch = useDispatch<any>()
-
-
+  const err = useSelector<AppRootStateType, string>(state => state.app.error)
+  console.log('====================================');
+  console.log(err);
+  console.log('====================================');
   if (!booksReducer.books) {
     return <div style={item} >
       <Main booksReducer={booksReducer} />
@@ -32,22 +27,9 @@ function App() {
     </div>
   }
 
-  if (initialized) {
-    return <div
-      style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
-      <Preloader />
-    </div>
-  }
-
   return (
     <div className={styles.App}>
       <Main booksReducer={booksReducer} />
-      <Routes>
-        <Route path="/" element={<Navigate to={"/books"} />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/book/*" element={<DetailedBookInfo />} />
-        <Route path="/book/:volumeId" element={<DetailedBookInfo />} />
-      </Routes>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent } from 'react'
+import { ErrorSnackbar } from '../../ErrorSnackbar/ErrorSnackbar';
 import styles from './Search.module.scss';
 
 type PropsType = {
@@ -16,12 +17,13 @@ export const Search: React.FC<PropsType> = (
         onKeyPressInputHandler(e.code)
     }
 
-    let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         onChangeInputHandler(e.currentTarget.value)
     }
 
     return (
         <div className={styles.search}>
+            <ErrorSnackbar />
             <h1> Search for books </h1>
             <div>
                 <input type="text"

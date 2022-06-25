@@ -21,7 +21,7 @@
             margin: 10px;
             text-align: start;
 
-            background-image: linear-gradient(to right, rgb(245, 245, 245) 0%, rgb(223, 223, 223) 51%, #afafaf 100%);
+            background-image: linear-gradient(to right, rgb(245, 245, 245) 0%, rgb(223, 223, 223) 51%, #c0c0c8 100%);
             background-size: 200% auto;
             transition: .5s;
 
@@ -58,6 +58,7 @@
                 color: rgb(92, 92, 93);
                 border-bottom: 1px solid rgb(158, 158, 158);
             }
+
             div {
                 &:nth-child(2) {}
 
@@ -72,6 +73,7 @@
         }
 
         :hover {
+            background-position: right center;
             transform: scale(1.02);
         }
     }

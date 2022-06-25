@@ -2,36 +2,33 @@ import React, { ChangeEvent } from 'react'
 import styles from './Select.module.scss';
 
 type PropsType = {
-    sort: string[]
-    categor: string[]
     sorting: string
     categories: string
+    sort: string[]
+    categor: string[]
     handleSelectSorting: (srortingValue: string) => void
     handleSelectCategories: (categoriesValue: string) => void
 }
 export const Select: React.FC<PropsType> = (
     {
-        sort, categor, sorting, categories,
+        sorting, categories, sort, categor,
         handleSelectSorting, handleSelectCategories
     }) => {
 
 
-    const sortOptions: JSX.Element[] = sort.map((o, i) => ( // map options with key
-        <option className={styles.option} key={o + '-' + i}>{o}</option>
+    const sortOptions: JSX.Element[] = sort.map((s, i) => (
+        <option className={styles.option} key={s + '-' + i}>{s}</option>
     ))
 
-    const categoriesOptions: JSX.Element[] = categor.map((o, i) => ( // map options with key
-        <option className={styles.option} key={o + '-' + i}>{o}</option>
+    const categoriesOptions: JSX.Element[] = categor.map((c, i) => (
+        <option className={styles.option} key={c + '-' + i}>{c}</option>
     ))
 
     const handleOnChangeSorting = (e: ChangeEvent<HTMLSelectElement>) => {
-        // setSorting(e.currentTarget.value)
         handleSelectSorting(e.currentTarget.value)
-
     }
 
     const handleOnChangeCategories = (e: ChangeEvent<HTMLSelectElement>) => {
-        // setCategories(e.currentTarget.value)
         handleSelectCategories(e.currentTarget.value)
     }
 

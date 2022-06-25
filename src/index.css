@@ -7,8 +7,13 @@ html {
   -moz-osx-font-smoothing: grayscale;
   
  background-image: url(https://dg.imgix.net/get-more-from-the-bible-this-year-riqkc7bg-en/landscape/get-more-from-the-bible-this-year-riqkc7bg-a6841d3f40168705fd31c6259caf6d92.png?ts=1606841268&ixlib=rails-4.2.0&auto=format%2Ccompress&fit=min&w=700&h=394&dpr=2&ch=Width%2CDPR);
-  height: 110vh;
+  height: 100vh;
   background-size:  100% 100%; 
+  /* background-repeat: no-repeat; */
+}
+
+body {
+  height: 80vh;
 }
 
 code {
