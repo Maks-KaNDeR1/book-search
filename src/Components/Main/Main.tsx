@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { BooksReducerType, requestAddBooks, requestBooks } from '../../store/books-reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { BooksReducerType, loadMoreBooks, requestBooks, setCategories, setCategoriesBooks, setSearchValue, setSorting, setStartIndex } from '../../store/books-reducer';
 import { Select } from './Select/Select';
 import styles from './Main.module.scss';
 import { Search } from './Search/Search';
 import { Books } from './Books/Books';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { DetailedBookInfo } from './Books/DetailedBookInfo/DetailedBookInfo';
+import { AppRootStateType } from '../../store/store';
+import { booksAPI, BookType } from '../../api/api';
 
 
-const sort = ['relevance', 'newest']
-const categor = ['all', 'art', 'biography', 'computers', 'history', 'medical', 'poetry']
 
 
 type PropsType = {
@@ -21,59 +21,69 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
 
     const dispatch = useDispatch<any>()
 
-    const [value, setValue] = useState('')
-    const [sorting, setSorting] = useState<string>(sort[0])
-    const [categories, setCategories] = useState(categor[0])
-    const [startIndex, setStartIndex] = useState(0)
+    const b = booksReducer
+    const value = b.searchValue
+    const sorting = b.sorting
+    const categories = b.categories
+    const startIndex = b.startIndex
+
+
+    let [sortedBooks, setSortedBooks] = useState([] as BookType[])
+
+    if (categories === 'all') {
+        setSortedBooks(b.books)
+    } else {
+        setSortedBooks(b.categoriesBooks)
+    }
+
+
+    let filtered = booksReducer.books.filter(b => {
+        if (b.volumeInfo.categories) {
+            return b.volumeInfo.categories[0] === categories
+        } else return false
+    }
+    )
 
     useEffect(() => {
-        const value = sessionStorage.getItem('value')
-        const sortValue = sessionStorage.getItem('sorting')
-        const catValue = sessionStorage.getItem('categories')
-        const startValue = sessionStorage.getItem('startIndex')
+        setCategoriesBooks(filtered)
+    }, [categories])
 
-        value ? setValue(JSON.parse(value)) : setValue('')
-        sortValue ? setSorting(JSON.parse(sortValue)) : setSorting('relevance')
-        catValue ? setCategories(JSON.parse(catValue)) : setCategories('all')
-        startValue ? setStartIndex(JSON.parse(startValue)) : setStartIndex(0)
-    }, []);
-
-    useEffect(() => {
-        sessionStorage.setItem('value', JSON.stringify(value));
-        sessionStorage.setItem('sorting', JSON.stringify(sorting));
-        sessionStorage.setItem('categories', JSON.stringify(categories));
-        sessionStorage.setItem('startIndex', JSON.stringify(startIndex));
-    }, [value, sorting, categories, startIndex]);
+    console.log(sortedBooks)
+    console.log(filtered)
+    //+7 953 078 2844
+    do {
+        const newIndex = 30 + startIndex
+        dispatch(setStartIndex(newIndex))
+        dispatch(loadMoreBooks(value, sorting, newIndex))
+    } while (sortedBooks.length < 30)
 
 
     const onClickSearchHandler = () => {
-        setStartIndex(0)
+        dispatch(setStartIndex(0))
         dispatch(requestBooks(value, sorting, startIndex))
     }
-
     const handleSelectSorting = (sortingValue: string) => {
-        setSorting(sortingValue)
+        const newvalue = sortingValue
+        dispatch(setSorting(newvalue))
+        dispatch(requestBooks(newvalue, sorting, startIndex))
+    }
+    const handleSelectCategories = (categoriesValue: string) => {
+        const newCategory = categoriesValue
+        dispatch(setCategories(newCategory))
         dispatch(requestBooks(value, sorting, startIndex))
     }
-
-    const handleSelectCategories = (categoriesValue: string) => {
-        setCategories(categoriesValue)
-        // dispatch(requestBooks(value, sorting, startIndex))
-    }
-
     const onKeyPressInputHandler = (code: string) => {
         if (code === 'Enter') {
             dispatch(requestBooks(value, sorting, startIndex))
         }
     }
-
     const onChangeInputHandler = (inputValue: string) => {
-        setValue(inputValue)
+        dispatch(setSearchValue(inputValue))
     }
-
     const onIndexChanged = (indexValue: number) => {
-        setStartIndex(startIndex + indexValue)
-        dispatch(requestAddBooks(value, sorting, startIndex))
+        const newIndex = indexValue + startIndex
+        dispatch(setStartIndex(newIndex))
+        dispatch(loadMoreBooks(value, sorting, newIndex))
     }
 
     if (!booksReducer.books?.length) {
@@ -91,11 +101,8 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
                     onChangeInputHandler={onChangeInputHandler}
                     onKeyPressInputHandler={onKeyPressInputHandler} />
                 <div>
-                    <Select
-                        sorting={sorting}
+                    <Select sorting={sorting}
                         categories={categories}
-                        sort={sort}
-                        categor={categor}
                         handleSelectSorting={handleSelectSorting}
                         handleSelectCategories={handleSelectCategories}
                     />
@@ -103,13 +110,8 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
                 <Routes>
                     <Route path="/" element={<Navigate to={"/books"} />} />
                     <Route path="/books" element={
-                        <Books
-                            value={value}
-                            sorting={sorting}
-                            categories={categories}
-                            startIndex={startIndex}
-                            onIndexChanged={onIndexChanged}
-                        />} />
+                        <Books sortedBooks={sortedBooks} onIndexChanged={onIndexChanged} categories={categories} />
+                    } />
                     <Route path="/volume/*" element={<DetailedBookInfo />} />
                     <Route path="/volume/:volumeId" element={<DetailedBookInfo />} />
                 </Routes>

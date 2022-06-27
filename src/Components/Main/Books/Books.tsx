@@ -1,25 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { BookType } from '../../../api/api'
 import { BooksReducerType } from '../../../store/books-reducer'
 import { AppRootStateType } from '../../../store/store'
 import { Preloader } from '../../common/Preloader/Preloader'
 import styles from './Books.module.scss'
 
 type PropsType = {
-    value: string
-    sorting: string
-    categories: string
-    startIndex: number
+    sortedBooks: BookType[]
     onIndexChanged: (value: number) => void
-
+    categories: string
 }
 
-export const Books: React.FC<PropsType> = (
-    { value, sorting, categories, startIndex, onIndexChanged }) => {
+export const Books: React.FC<PropsType> = ({ sortedBooks, onIndexChanged }) => {
 
     const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
     const initialized = useSelector<AppRootStateType>(state => state.app.initialized)
+
 
     const onClickHandler = () => {
         onIndexChanged(30)
@@ -30,7 +28,6 @@ export const Books: React.FC<PropsType> = (
     }
 
     console.log(booksReducer.books);
-
 
     if (initialized) {
         return <div
@@ -45,7 +42,7 @@ export const Books: React.FC<PropsType> = (
                 <h3>Found {booksReducer.totalItemsCount} results</h3>
                 <div className={styles.booksBlock}  >
                     {
-                        booksReducer.books.map((b, id) => <div key={id} className={styles.bookItem}  >
+                        sortedBooks.map((b, i) => <div key={b.etag + i} className={styles.bookItem}  >
                             <Link to={`/volume/${b.id}`}>
                                 <img src={b.volumeInfo.imageLinks?.smallThumbnail} alt=''
                                 />
@@ -58,7 +55,7 @@ export const Books: React.FC<PropsType> = (
                             <div className={styles.authors}>
                                 {
                                     b.volumeInfo.authors?.length > 0 ?
-                                        b.volumeInfo.authors.map(a => <div key={b.etag} >{a}</div>)
+                                        b.volumeInfo.authors.map((a, i) => <div key={b.etag + i}>{a}</div>)
                                         :
                                         <div>{b.volumeInfo?.authors}</div>
                                 }

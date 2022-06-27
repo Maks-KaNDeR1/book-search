@@ -50,6 +50,6 @@ export type BookType = {
             smallThumbnail: string
             thumbnail: string
         }
-        categories: string
+        categories: string[]
     },
 }

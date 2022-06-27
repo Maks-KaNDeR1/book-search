@@ -1,17 +1,21 @@
 import React, { ChangeEvent } from 'react'
 import styles from './Select.module.scss';
 
+
+const sort = ['relevance', 'newest']
+const categor = ['all', 'Art', 'Biography', 'Computers', 'History', 'Medical', 'Poetry']
+
+
 type PropsType = {
     sorting: string
     categories: string
-    sort: string[]
-    categor: string[]
     handleSelectSorting: (srortingValue: string) => void
     handleSelectCategories: (categoriesValue: string) => void
 }
+
 export const Select: React.FC<PropsType> = (
     {
-        sorting, categories, sort, categor,
+        sorting, categories,
         handleSelectSorting, handleSelectCategories
     }) => {
 
@@ -31,7 +35,6 @@ export const Select: React.FC<PropsType> = (
     const handleOnChangeCategories = (e: ChangeEvent<HTMLSelectElement>) => {
         handleSelectCategories(e.currentTarget.value)
     }
-
 
     return (
         <div className={styles.select}>

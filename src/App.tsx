@@ -10,10 +10,7 @@ import { ErrorSnackbar } from './Components/ErrorSnackbar/ErrorSnackbar';
 function App() {
 
   const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
-  const err = useSelector<AppRootStateType, string>(state => state.app.error)
-  console.log('====================================');
-  console.log(err);
-  console.log('====================================');
+
   if (!booksReducer.books) {
     return <div style={item} >
       <Main booksReducer={booksReducer} />
