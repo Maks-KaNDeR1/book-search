@@ -4,7 +4,6 @@ import { Main } from './Components/Main/Main';
 import { useSelector } from 'react-redux';
 import { AppRootStateType } from './store/store';
 import { BooksReducerType } from './store/books-reducer';
-import { ErrorSnackbar } from './Components/ErrorSnackbar/ErrorSnackbar';
 
 
 function App() {

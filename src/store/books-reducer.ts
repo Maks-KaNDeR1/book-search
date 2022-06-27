@@ -1,7 +1,6 @@
 import { Dispatch } from "redux";
 import { booksAPI, BookType } from "../api/api";
 import { errorCode, errorMessage, initializedSuccess } from "./app-reducer";
-import { AppRootStateType } from "./store";
 
 let initialState = {
     books: [] as BookType[],
@@ -97,22 +96,22 @@ export const requestBooks =
             dispatch(initializedSuccess(false))
         }
     }
-    
-    export const loadMoreBooks =
-        (value?: string, sorting?: string, startIndex?: number) => async (dispatch: Dispatch) => {
-            dispatch(initializedSuccess(true))
-            try {
-                const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
-                dispatch(setItemsTotalCount(res.data.totalItems));
-                dispatch(addBooks(res.data.items));
-            }
-            finally {
-                dispatch(initializedSuccess(false))
-            }
+
+export const loadMoreBooks =
+    (value?: string, sorting?: string, startIndex?: number) => async (dispatch: Dispatch) => {
+        dispatch(initializedSuccess(true))
+        try {
+            const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
+            dispatch(setItemsTotalCount(res.data.totalItems));
+            dispatch(addBooks(res.data.items));
         }
-    
-    
-    
+        finally {
+            dispatch(initializedSuccess(false))
+        }
+    }
+
+
+
 export type BooksActionsType =
     | SetBooksType
     | SetItemsTotalCountType

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { BooksReducerType, loadMoreBooks, requestBooks, setCategories, setCategoriesBooks, setSearchValue, setSorting, setStartIndex } from '../../store/books-reducer';
 import { Select } from './Select/Select';
 import styles from './Main.module.scss';
@@ -7,8 +7,7 @@ import { Search } from './Search/Search';
 import { Books } from './Books/Books';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { DetailedBookInfo } from './Books/DetailedBookInfo/DetailedBookInfo';
-import { AppRootStateType } from '../../store/store';
-import { booksAPI, BookType } from '../../api/api';
+import { BookType } from '../../api/api';
 
 
 
@@ -48,9 +47,7 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
         setCategoriesBooks(filtered)
     }, [categories])
 
-    console.log(sortedBooks)
-    console.log(filtered)
-    //+7 953 078 2844
+
     do {
         const newIndex = 30 + startIndex
         dispatch(setStartIndex(newIndex))
