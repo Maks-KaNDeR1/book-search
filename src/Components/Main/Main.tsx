@@ -36,11 +36,10 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
     const startIndex = b.startIndex
     const books = b.books
 
-
     useEffect(() => {
-        if (books.length === 0) return
+        if (books?.length === 0) return
         else {
-            if (books.length < booksLength * 30) {
+            if (books?.length < booksLength * 30) {
                 const newIndex = startIndex + 30
                 dispatch(setStartIndex(newIndex))
                 dispatch(loadMoreCategoriesBooks(value, sorting, newIndex))
@@ -89,21 +88,26 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
 
     }
 
-    // if (books?.length === 0) {
-    //     return <div style={item} >
-    //         <Main booksReducer={booksReducer} />
-    //         <span style={titleStyle}> Nothing was found </span>
-    //     </div>
-    // }
 
 
-    if (!booksReducer.books?.length) {
-        return <Search value={value}
-            onClickSearchHandler={onClickSearchHandler}
-            onChangeInputHandler={onChangeInputHandler}
-            onKeyPressInputHandler={onKeyPressInputHandler}
-        />
-
+    if (!booksReducer.books) {
+        return <div style={item} >
+            <Search value={value}
+                onClickSearchHandler={onClickSearchHandler}
+                onChangeInputHandler={onChangeInputHandler}
+                onKeyPressInputHandler={onKeyPressInputHandler}
+            />
+            <span style={titleStyle}> Nothing was found </span>
+        </div>
+    }
+    if (booksReducer.books?.length === 0) {
+        return <div>
+            <Search value={value}
+                onClickSearchHandler={onClickSearchHandler}
+                onChangeInputHandler={onChangeInputHandler}
+                onKeyPressInputHandler={onKeyPressInputHandler}
+            />
+        </div>
     } else {
         return (
             <div className={styles.main}>

@@ -10,14 +10,7 @@ function App() {
 
   const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
 
-  if (!booksReducer.books) {
-    return <div style={item} >
-      <Main booksReducer={booksReducer} />
-      <span style={titleStyle}> Nothing was found </span>
-    </div>
-  }
-
-  if (booksReducer.books.length === 0) {
+  if (booksReducer.books?.length === 0) {
     return <div style={item} >
       <Main booksReducer={booksReducer} />
     </div>
@@ -25,6 +18,8 @@ function App() {
 
   return (
     <div className={styles.App}>
+
+
       <Main booksReducer={booksReducer} />
     </div>
   );
@@ -38,10 +33,6 @@ let item: React.CSSProperties = {
   textAlign: 'center'
 }
 
-let titleStyle: React.CSSProperties = {
-  color: 'rgb(230, 86, 86)',
-  fontSize: '25px'
-}
 
 export default App;
 
