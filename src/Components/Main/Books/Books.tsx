@@ -8,14 +8,16 @@ import { Preloader } from '../../common/Preloader/Preloader'
 import styles from './Books.module.scss'
 
 type PropsType = {
-    sortedBooks: BookType[]
+    booksReducer: BooksReducerType
+    sortedBooks?: BookType[]
     onIndexChanged: (value: number) => void
     categories: string
+
 }
 
-export const Books: React.FC<PropsType> = ({ sortedBooks, onIndexChanged }) => {
+export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, onIndexChanged }) => {
 
-    const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
+    // const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
     const initialized = useSelector<AppRootStateType>(state => state.app.initialized)
 
 
@@ -36,13 +38,23 @@ export const Books: React.FC<PropsType> = ({ sortedBooks, onIndexChanged }) => {
         </div>
     }
 
+    let totalItemsCount = () => {
+        if (booksReducer.books.length < 30) {
+            return booksReducer.books.length
+        } else {
+            return booksReducer.totalItemsCount
+        }
+
+    }
+
+
     return (
         <div className={styles.main}>
             <div>
-                <h3>Found {booksReducer.totalItemsCount} results</h3>
+                <h3>Found {totalItemsCount()}  results</h3>
                 <div className={styles.booksBlock}  >
                     {
-                        sortedBooks.map((b, i) => <div key={b.etag + i} className={styles.bookItem}  >
+                        booksReducer.books.map((b, i) => <div key={b.etag + i} className={styles.bookItem}  >
                             <Link to={`/volume/${b.id}`}>
                                 <img src={b.volumeInfo.imageLinks?.smallThumbnail} alt=''
                                 />

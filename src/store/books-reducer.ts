@@ -1,3 +1,4 @@
+import { AppRootStateType } from './store';
 import { Dispatch } from "redux";
 import { booksAPI, BookType } from "../api/api";
 import { errorCode, errorMessage, initializedSuccess } from "./app-reducer";
@@ -8,8 +9,7 @@ let initialState = {
     searchValue: '',
     sorting: 'relevance',
     categories: 'all',
-    startIndex: 0,
-    categoriesBooks: [] as BookType[]
+    startIndex: 0
 };
 
 
@@ -20,9 +20,7 @@ export const booksReducer = (state: BooksReducerType = initialState, action: Boo
         case 'BOOKS/SET_BOOKS': {
             return { ...state, books: action.books }
         }
-        case 'BOOKS/SET_CATEGORIES_BOOKS': {
-            return { ...state, categoriesBooks: [...state.categoriesBooks, ...action.books] }
-        }
+        case 'BOOKS/SET_CATEGORIES_BOOKS':
         case 'BOOKS/ADD_BOOKS': {
             return { ...state, books: [...state.books, ...action.books] }
         }
@@ -39,7 +37,6 @@ export const booksReducer = (state: BooksReducerType = initialState, action: Boo
             return { ...state, categories: action.value }
         }
         case 'BOOKS/SET_START_INDEX': {
-            console.log('1');
             return { ...state, startIndex: action.value }
         }
         default:
@@ -59,15 +56,19 @@ type SetItemsTotalCountType = ReturnType<typeof setItemsTotalCount>
 export const setItemsTotalCount = (totalItemsCount: number) =>
     ({ type: 'BOOKS/SET_TOTAL_ITEMS_COUNT', totalItemsCount } as const)
 
-export type SetSearchValueType = ReturnType<typeof setSearchValue>
+
+type SetSearchValueType = ReturnType<typeof setSearchValue>
 export const setSearchValue = (value: string) =>
     ({ type: 'BOOKS/SET_SEARCH_VALUE', value } as const)
+
 type SetSortingType = ReturnType<typeof setSorting>
 export const setSorting = (value: string) =>
     ({ type: 'BOOKS/SET_SORTING', value } as const)
+
 type SetCategoriesType = ReturnType<typeof setCategories>
 export const setCategories = (value: string) =>
     ({ type: 'BOOKS/SET_CATEGORIES', value } as const)
+
 type SetStartIndexType = ReturnType<typeof setStartIndex>
 export const setStartIndex = (value: number) =>
     ({ type: 'BOOKS/SET_START_INDEX', value } as const)
@@ -109,6 +110,34 @@ export const loadMoreBooks =
             dispatch(initializedSuccess(false))
         }
     }
+
+export const loadMoreCategoriesBooks =
+    (value?: string, sorting?: string, startIndex?: number) =>
+        async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+
+            const booksReducer = getState().books
+
+            dispatch(initializedSuccess(true))
+            try {
+                const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
+                dispatch(setItemsTotalCount(res.data.totalItems));
+
+                const filtered = res.data.items.filter(b => {
+                    if (b.volumeInfo.categories) {
+                        return b.volumeInfo.categories[0] === booksReducer.categories
+                    } else return false
+                })
+
+                if (booksReducer.books.length !== 0) {
+                    let residue = booksReducer.books.length - filtered.length
+                    filtered.splice(residue, filtered.length)
+                }
+                dispatch(setCategoriesBooks(filtered));
+            }
+            finally {
+                dispatch(initializedSuccess(false))
+            }
+        }
 
 
 
