@@ -17,7 +17,7 @@ type PropsType = {
 
 export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, onIndexChanged }) => {
 
-    // const booksReducer = useSelector<AppRootStateType, BooksReducerType>(state => state.books)
+    const { books } = booksReducer
     const initialized = useSelector<AppRootStateType>(state => state.app.initialized)
 
 
@@ -25,11 +25,11 @@ export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, onIndexC
         onIndexChanged(30)
     }
 
-    if (!booksReducer.books?.length) {
+    if (!books?.length) {
         return <div>Nothing was found</div>
     }
 
-    console.log(booksReducer.books);
+    console.log(books);
 
     if (initialized) {
         return <div
@@ -39,8 +39,8 @@ export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, onIndexC
     }
 
     let totalItemsCount = () => {
-        if (booksReducer.books.length < 30) {
-            return booksReducer.books.length
+        if (books.length < 30) {
+            return books.length
         } else {
             return booksReducer.totalItemsCount
         }
@@ -54,7 +54,7 @@ export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, onIndexC
                 <h3>Found {totalItemsCount()}  results</h3>
                 <div className={styles.booksBlock}  >
                     {
-                        booksReducer.books.map((b, i) => <div key={b.etag + i} className={styles.bookItem}  >
+                        books.map((b, i) => <div key={b.etag + i} className={styles.bookItem}  >
                             <Link to={`/volume/${b.id}`}>
                                 <img src={b.volumeInfo.imageLinks?.smallThumbnail} alt=''
                                 />

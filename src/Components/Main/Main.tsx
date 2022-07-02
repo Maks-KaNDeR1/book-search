@@ -25,16 +25,10 @@ type PropsType = {
 }
 
 export const Main: React.FC<PropsType> = ({ booksReducer }) => {
+    const { books, searchValue, sorting, categories, startIndex } = booksReducer
 
     let [booksLength, setBooksLength] = useState(1)
     const dispatch = useDispatch<any>()
-
-    const b = booksReducer
-    const value = b.searchValue
-    const sorting = b.sorting
-    const categories = b.categories
-    const startIndex = b.startIndex
-    const books = b.books
 
     useEffect(() => {
         if (books?.length === 0) return
@@ -42,7 +36,7 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
             if (books?.length < booksLength * 30) {
                 const newIndex = startIndex + 30
                 dispatch(setStartIndex(newIndex))
-                dispatch(loadMoreCategoriesBooks(value, sorting, newIndex))
+                dispatch(loadMoreCategoriesBooks(searchValue, sorting, newIndex))
             }
         }
     }, [books, sorting])
@@ -51,12 +45,12 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
         const newIndex = 0
         dispatch(setCategories('all'))
         dispatch(setStartIndex(newIndex))
-        dispatch(requestBooks(value, sorting, newIndex))
+        dispatch(requestBooks(searchValue, sorting, newIndex))
     }
     const handleSelectSorting = (sortingValue: string) => {
         const newvalue = sortingValue
         dispatch(setSorting(newvalue))
-        dispatch(requestBooks(newvalue, sorting, startIndex))
+        dispatch(requestBooks(searchValue, newvalue, startIndex))
     }
     const handleSelectCategories = (categoriesValue: string) => {
         const newCategory = categoriesValue
@@ -65,15 +59,15 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
         if (newCategory === 'all') {
             const newIndex = 0
             dispatch(setStartIndex(newIndex))
-            dispatch(requestBooks(value, sorting, newIndex))
+            dispatch(requestBooks(searchValue, sorting, newIndex))
         } else {
             dispatch(setBooks([] as BookType[]))
-            dispatch(loadMoreCategoriesBooks(value, sorting, startIndex))
+            dispatch(loadMoreCategoriesBooks(searchValue, sorting, startIndex))
         }
     }
     const onKeyPressInputHandler = (code: string) => {
         if (code === 'Enter') {
-            dispatch(requestBooks(value, sorting, startIndex))
+            dispatch(requestBooks(searchValue, sorting, startIndex))
         }
     }
     const onChangeInputHandler = (inputValue: string) => {
@@ -81,18 +75,15 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
     }
     const onIndexChanged = (indexValue: number) => {
         setBooksLength(booksLength += 1)
-        console.log(booksLength);
         const newIndex = indexValue + startIndex
         dispatch(setStartIndex(newIndex))
-        dispatch(loadMoreBooks(value, sorting, newIndex))
-
+        dispatch(loadMoreBooks(searchValue, sorting, newIndex))
     }
-
 
 
     if (!booksReducer.books) {
         return <div style={item} >
-            <Search value={value}
+            <Search value={searchValue}
                 onClickSearchHandler={onClickSearchHandler}
                 onChangeInputHandler={onChangeInputHandler}
                 onKeyPressInputHandler={onKeyPressInputHandler}
@@ -102,7 +93,7 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
     }
     if (booksReducer.books?.length === 0) {
         return <div>
-            <Search value={value}
+            <Search value={searchValue}
                 onClickSearchHandler={onClickSearchHandler}
                 onChangeInputHandler={onChangeInputHandler}
                 onKeyPressInputHandler={onKeyPressInputHandler}
@@ -111,7 +102,7 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
     } else {
         return (
             <div className={styles.main}>
-                <Search value={value}
+                <Search value={searchValue}
                     onClickSearchHandler={onClickSearchHandler}
                     onChangeInputHandler={onChangeInputHandler}
                     onKeyPressInputHandler={onKeyPressInputHandler} />

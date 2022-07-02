@@ -1,15 +1,8 @@
 import axios from 'axios';
 
-// const instance = axios.create({
-//     baseURL: 'https://www.googleapis.com/books/v1/',
-//     headers: {
-//         'key': 'AIzaSyDwIk5yc27iRinGB4KjckAX4pmeEAWMVZ0'
-//     }
-// })
+// let key = 'AIzaSyDwIk5yc27iRinGB4KjckAX4pmeEAWMVZ0'
 
 let baseURL = 'https://www.googleapis.com/books/v1/'
-let key = 'AIzaSyDwIk5yc27iRinGB4KjckAX4pmeEAWMVZ0'
-
 
 
 export const booksAPI = {

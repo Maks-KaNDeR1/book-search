@@ -18,8 +18,6 @@ function App() {
 
   return (
     <div className={styles.App}>
-
-
       <Main booksReducer={booksReducer} />
     </div>
   );
