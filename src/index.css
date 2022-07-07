@@ -1,14 +1,8 @@
 html {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
- background-image: url(https://dg.imgix.net/get-more-from-the-bible-this-year-riqkc7bg-en/landscape/get-more-from-the-bible-this-year-riqkc7bg-a6841d3f40168705fd31c6259caf6d92.png?ts=1606841268&ixlib=rails-4.2.0&auto=format%2Ccompress&fit=min&w=700&h=394&dpr=2&ch=Width%2CDPR);
+  background-image: url(https://dg.imgix.net/get-more-from-the-bible-this-year-riqkc7bg-en/landscape/get-more-from-the-bible-this-year-riqkc7bg-a6841d3f40168705fd31c6259caf6d92.png?ts=1606841268&ixlib=rails-4.2.0&auto=format%2Ccompress&fit=min&w=700&h=394&dpr=2&ch=Width%2CDPR);
   height: 100vh;
-  background-size:  100% 100%; 
+  background-size: 100% 100%;
   /* background-repeat: no-repeat; */
 }
 
@@ -17,6 +11,6 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace; */
 }

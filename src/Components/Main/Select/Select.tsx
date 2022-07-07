@@ -15,8 +15,7 @@ type PropsType = {
 
 export const Select: React.FC<PropsType> = (
     {
-        sorting, categories,
-        handleSelectSorting, handleSelectCategories
+        sorting, categories, handleSelectSorting, handleSelectCategories
     }) => {
 
 

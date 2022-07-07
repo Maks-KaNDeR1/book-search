@@ -11,7 +11,9 @@ type PropsType = {
 
 
 export const Search: React.FC<PropsType> = (
-    { value, onClickSearchHandler, onChangeInputHandler, onKeyPressInputHandler }) => {
+    {
+        value, onClickSearchHandler, onChangeInputHandler, onKeyPressInputHandler
+    }) => {
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         onKeyPressInputHandler(e.code)

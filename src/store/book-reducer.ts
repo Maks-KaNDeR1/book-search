@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { booksAPI, BookType } from "../api/api";
+import { setStatus } from "./app-reducer";
 
 let initialState = {
     book: {} as BookType
@@ -9,9 +10,8 @@ export type BookReducerType = typeof initialState
 
 export const bookReducer = (state: BookReducerType = initialState, action: BookActionsType): BookReducerType => {
     switch (action.type) {
-        case 'BOOK/SET_BOOK': {
+        case 'BOOK/SET_BOOK':
             return { ...state, book: action.book }
-        }
         default:
             return state;
     }
@@ -24,8 +24,10 @@ export const setBook = (book: BookType) =>
 
 
 export const requestBook = (volumeId: string | undefined) => async (dispatch: Dispatch) => {
+    dispatch(setStatus(true))
     const res = await booksAPI.getVolumeBook(volumeId)
     dispatch(setBook(res.data));
+    dispatch(setStatus(false))
 }
 
 

@@ -17,7 +17,6 @@ import { Search } from './Search/Search';
 import { Books } from './Books/Books';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { DetailedBookInfo } from './Books/DetailedBookInfo/DetailedBookInfo';
-import { BookType } from '../../api/api';
 
 
 type PropsType = {
@@ -31,27 +30,42 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
     const dispatch = useDispatch<any>()
 
     useEffect(() => {
-        if (books?.length === 0) return
-        else {
-            if (books?.length < booksLength * 30) {
-                const newIndex = startIndex + 30
-                dispatch(setStartIndex(newIndex))
-                dispatch(loadMoreCategoriesBooks(searchValue, sorting, newIndex))
-            }
+        // if (books?.length === 0) return
+        // else {
+        if (books?.length < booksLength * 30) {
+            const newIndex = startIndex + 30
+            dispatch(setStartIndex(newIndex))
+            dispatch(loadMoreCategoriesBooks(searchValue, sorting, newIndex))
+        } if (books?.length > booksLength * 30) {
+            let residue = books.length - booksLength * 30
+            let crop = books.slice(residue)
+            dispatch(setBooks(crop))
         }
     }, [books, sorting])
 
-    const onClickSearchHandler = () => {
+
+    const onChangeInputHandler = (inputValue: string) => {
+        dispatch(setSearchValue(inputValue))
+    }
+    const searchHandler = () => {
         const newIndex = 0
         dispatch(setCategories('all'))
         dispatch(setStartIndex(newIndex))
         dispatch(requestBooks(searchValue, sorting, newIndex))
     }
-    const handleSelectSorting = (sortingValue: string) => {
-        const newvalue = sortingValue
-        dispatch(setSorting(newvalue))
-        dispatch(requestBooks(searchValue, newvalue, startIndex))
+    const onClickSearchHandler = () => {
+        searchHandler()
     }
+    const onKeyPressInputHandler = (code: string) => {
+        if (code === 'Enter') searchHandler()
+    }
+
+    const handleSelectSorting = (sortingValue: string) => {
+        const newValue = sortingValue
+        dispatch(setSorting(newValue))
+        dispatch(requestBooks(searchValue, newValue, startIndex))
+    }
+
     const handleSelectCategories = (categoriesValue: string) => {
         const newCategory = categoriesValue
         dispatch(setCategories(newCategory))
@@ -61,25 +75,18 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
             dispatch(setStartIndex(newIndex))
             dispatch(requestBooks(searchValue, sorting, newIndex))
         } else {
-            dispatch(setBooks([] as BookType[]))
-            dispatch(loadMoreCategoriesBooks(searchValue, sorting, startIndex))
+            // dispatch(setBooks([] as BookType[]))
+            let clickedOnSelect = true
+            dispatch(loadMoreCategoriesBooks(searchValue, sorting, startIndex, clickedOnSelect))
         }
     }
-    const onKeyPressInputHandler = (code: string) => {
-        if (code === 'Enter') {
-            dispatch(requestBooks(searchValue, sorting, startIndex))
-        }
-    }
-    const onChangeInputHandler = (inputValue: string) => {
-        dispatch(setSearchValue(inputValue))
-    }
-    const onIndexChanged = (indexValue: number) => {
-        setBooksLength(booksLength += 1)
+
+    const loadMoreBooksOnClick = (indexValue: number) => {
+        setBooksLength(prevState => prevState + 1)
         const newIndex = indexValue + startIndex
         dispatch(setStartIndex(newIndex))
         dispatch(loadMoreBooks(searchValue, sorting, newIndex))
     }
-
 
     if (!booksReducer.books) {
         return <div style={item} >
@@ -116,7 +123,11 @@ export const Main: React.FC<PropsType> = ({ booksReducer }) => {
                 <Routes>
                     <Route path="/" element={<Navigate to={"/books"} />} />
                     <Route path="/books" element={
-                        <Books booksReducer={booksReducer} onIndexChanged={onIndexChanged} categories={categories} />
+                        <Books
+                            booksReducer={booksReducer}
+                            loadMoreBooksOnClick={loadMoreBooksOnClick}
+                            categories={categories}
+                        />
                     } />
                     <Route path="/volume/*" element={<DetailedBookInfo />} />
                     <Route path="/volume/:volumeId" element={<DetailedBookInfo />} />

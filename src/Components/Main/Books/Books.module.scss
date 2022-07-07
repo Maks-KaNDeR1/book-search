@@ -14,7 +14,9 @@
         grid-template-columns: 230px 230px 230px 230px 230px;
         justify-content: space-around;
         margin: 0 50px 0 50px;
-
+        // background-image: linear-gradient(to right, #e3dbd8 0%,
+        //  #b9a7a7 51%, #260a04 100%);
+      
         background-color: #fff;
 
         .bookItem {
@@ -42,6 +44,20 @@
 
             :hover {}
 
+            .categories {
+                margin: 5px;
+                font-size: small;
+                color: rgb(92, 92, 93);
+                border-bottom: 1px solid rgb(158, 158, 158);
+            }
+
+            .noCategories {
+                color: rgb(241 241 241);
+                border: 'none';
+                transition: .5s;
+            }
+
+
             .title {
                 margin: 5px;
             }
@@ -50,13 +66,6 @@
                 margin: 5px;
                 font-size: small;
                 color: rgb(92, 92, 93);
-            }
-
-            span {
-                margin: 5px;
-                font-size: small;
-                color: rgb(92, 92, 93);
-                border-bottom: 1px solid rgb(158, 158, 158);
             }
 
             div {
@@ -75,6 +84,10 @@
         :hover {
             background-position: right center;
             transform: scale(1.02);
+            .noCategories {
+
+                color: rgb(222, 222, 222)
+            }
         }
     }
 
@@ -86,12 +99,21 @@
         opacity: 0.7;
 
         button {
+            cursor: pointer;
             border: none;
+            outline: none;
             height: 40px;
             width: 200px;
-            background-color: rgb(176, 176, 176);
             border-radius: 10px;
-            cursor: pointer;
+
+            background-image: linear-gradient(to right, rgb(176, 176, 176) 0%, rgb(133, 133, 133) 51%, #3f3f46 100%);
+            background-size: 200% auto;
+            transition: .5s;
+        }
+
+        :hover {
+            color: #fff;
+            background-position: right center;
         }
     }
 }

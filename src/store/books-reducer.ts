@@ -1,7 +1,7 @@
 import { AppRootStateType } from './store';
 import { Dispatch } from "redux";
 import { booksAPI, BookType } from "../api/api";
-import { errorCode, errorMessage, initializedSuccess } from "./app-reducer";
+import { errorCode, errorMessage, setStatus } from "./app-reducer";
 
 let initialState = {
     books: [] as BookType[],
@@ -30,9 +30,9 @@ export const booksReducer = (state: BooksReducerType = initialState, action: Boo
         case 'BOOKS/SET_SEARCH_VALUE': {
             return { ...state, searchValue: action.value }
         }
-        case 'BOOKS/SET_SORTING': {
+        case 'BOOKS/SET_SORTING':
             return { ...state, sorting: action.value }
-        }
+
         case 'BOOKS/SET_CATEGORIES': {
             return { ...state, categories: action.value }
         }
@@ -44,102 +44,111 @@ export const booksReducer = (state: BooksReducerType = initialState, action: Boo
     }
 };
 
-type SetBooksType = ReturnType<typeof setBooks>
 export const setBooks = (books: BookType[]) =>
     ({ type: 'BOOKS/SET_BOOKS', books } as const)
 
-type AddBooksType = ReturnType<typeof addBooks>
 export const addBooks = (books: BookType[]) =>
     ({ type: 'BOOKS/ADD_BOOKS', books } as const)
 
-type SetItemsTotalCountType = ReturnType<typeof setItemsTotalCount>
 export const setItemsTotalCount = (totalItemsCount: number) =>
     ({ type: 'BOOKS/SET_TOTAL_ITEMS_COUNT', totalItemsCount } as const)
 
-
-type SetSearchValueType = ReturnType<typeof setSearchValue>
 export const setSearchValue = (value: string) =>
     ({ type: 'BOOKS/SET_SEARCH_VALUE', value } as const)
 
-type SetSortingType = ReturnType<typeof setSorting>
 export const setSorting = (value: string) =>
     ({ type: 'BOOKS/SET_SORTING', value } as const)
 
-type SetCategoriesType = ReturnType<typeof setCategories>
 export const setCategories = (value: string) =>
     ({ type: 'BOOKS/SET_CATEGORIES', value } as const)
 
-type SetStartIndexType = ReturnType<typeof setStartIndex>
 export const setStartIndex = (value: number) =>
     ({ type: 'BOOKS/SET_START_INDEX', value } as const)
 
 
-type SetCategoriesBooksype = ReturnType<typeof setCategoriesBooks>
 export const setCategoriesBooks = (books: BookType[]) =>
     ({ type: 'BOOKS/SET_CATEGORIES_BOOKS', books } as const)
 
 
 
 
+const getBooksAPI = async (
+    dispatch: Dispatch,
+    actionCreator: Function,
+    value?: string,
+    sorting?: string,
+    startIndex?: number
+) => {
+
+    dispatch(setStatus(true))
+    try {
+        const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
+        dispatch(actionCreator(res.data.items));
+        dispatch(setItemsTotalCount(res.data.totalItems));
+    }
+    catch (err: any) {
+        dispatch(errorMessage(err.response.data.error.message))
+        dispatch(errorCode(err.response.data.error.code))
+    }
+    finally {
+        dispatch(setStatus(false))
+    }
+}
+
 export const requestBooks =
     (value?: string, sorting?: string, startIndex?: number) => async (dispatch: Dispatch) => {
-        dispatch(initializedSuccess(true))
-        try {
-            const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
-            dispatch(setBooks(res.data.items));
-            dispatch(setItemsTotalCount(res.data.totalItems));
-        }
-        catch (err: any) {
-            dispatch(errorMessage(err.response.data.error.message))
-            dispatch(errorCode(err.response.data.error.code))
-        }
-        finally {
-            dispatch(initializedSuccess(false))
-        }
+        getBooksAPI(dispatch, setBooks, value, sorting, startIndex)
     }
 
 export const loadMoreBooks =
     (value?: string, sorting?: string, startIndex?: number) => async (dispatch: Dispatch) => {
-        dispatch(initializedSuccess(true))
+        getBooksAPI(dispatch, addBooks, value, sorting, startIndex)
+    }
+
+
+export const loadMoreCategoriesBooks = (value?: string, sorting?: string, startIndex?: number, clickedOnSelect?: boolean) =>
+    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+        const b = getState().books
+
+        dispatch(setStatus(true))
         try {
             const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
-            dispatch(setItemsTotalCount(res.data.totalItems));
-            dispatch(addBooks(res.data.items));
+
+            setFilteredBooks(dispatch, res.data.items, b.categories, clickedOnSelect)
         }
         finally {
-            dispatch(initializedSuccess(false))
+            dispatch(setStatus(false))
         }
     }
 
-export const loadMoreCategoriesBooks =
-    (value?: string, sorting?: string, startIndex?: number) =>
-        async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+const setFilteredBooks = (
+    dispatch: Dispatch,
+    items: BookType[],
+    categories: string,
+    clickedOnSelect?: boolean
+) => {
 
-            const booksReducer = getState().books
+    const filtered = items.filter(b => {
+        if (b.volumeInfo.categories) {
+            return b.volumeInfo.categories[0] === categories
+        } else return false
+    })
 
-            dispatch(initializedSuccess(true))
-            try {
-                const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)
-                dispatch(setItemsTotalCount(res.data.totalItems));
-
-                const filtered = res.data.items.filter(b => {
-                    if (b.volumeInfo.categories) {
-                        return b.volumeInfo.categories[0] === booksReducer.categories
-                    } else return false
-                })
-
-                if (booksReducer.books.length !== 0) {
-                    let residue = booksReducer.books.length - filtered.length
-                    filtered.splice(residue, filtered.length)
-                }
-                dispatch(setCategoriesBooks(filtered));
-            }
-            finally {
-                dispatch(initializedSuccess(false))
-            }
-        }
+    if (clickedOnSelect) {
+        dispatch(setBooks([] as BookType[]))
+    }
+    dispatch(setCategoriesBooks(filtered));
+}
 
 
+type SetBooksType = ReturnType<typeof setBooks>
+type AddBooksType = ReturnType<typeof addBooks>
+type SetItemsTotalCountType = ReturnType<typeof setItemsTotalCount>
+type SetSearchValueType = ReturnType<typeof setSearchValue>
+type SetSortingType = ReturnType<typeof setSorting>
+type SetCategoriesType = ReturnType<typeof setCategories>
+type SetStartIndexType = ReturnType<typeof setStartIndex>
+type SetCategoriesBooksype = ReturnType<typeof setCategoriesBooks>
 
 export type BooksActionsType =
     | SetBooksType
@@ -151,3 +160,8 @@ export type BooksActionsType =
     | SetCategoriesType
     | SetStartIndexType
     | SetCategoriesBooksype
+
+
+
+
+
