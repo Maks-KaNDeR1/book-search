@@ -1,6 +1,6 @@
 {
-  "name": "books-search",
-  "homepage": "https://maks-kander1.github.io/books-search/",
+  "name": "book-search",
+  "homepage": "https://maks-kander1.github.io/book-search/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

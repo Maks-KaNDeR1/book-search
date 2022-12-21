@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import {
-    setBooks,
-    BooksReducerType,
-    requestBooks,
-    loadMoreBooks,
-    loadMoreCategoriesBooks,
-    setCategories,
-    setSearchValue,
-    setSorting,
-    setStartIndex
-} from '../../store/books-reducer';
+import { requestBooks, loadMoreBooks, loadMoreCategoriesBooks } from '../../store/books-thunks';
+import { setBooks, setCategories, setSearchValue, setSorting, setStartIndex } from '../../store/books-actions';
 import { Select } from './Select/Select';
 import styles from './Main.module.scss';
 import { Search } from './Search/Search';
 import { Books } from './Books/Books';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { DetailedBookInfo } from './Books/DetailedBookInfo/DetailedBookInfo';
-
+import { BooksReducerType } from '../../store/books-reducer';
 
 type PropsType = {
     booksReducer: BooksReducerType

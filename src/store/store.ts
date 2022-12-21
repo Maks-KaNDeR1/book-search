@@ -1,8 +1,9 @@
 import thunk, { ThunkAction } from 'redux-thunk';
 import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux'
-import { BooksActionsType, booksReducer } from './books-reducer'
+import { booksReducer } from './books-reducer'
 import { BookActionsType, bookReducer } from './book-reducer';
 import appReducer, { AppActionsType } from './app-reducer';
+import { BooksActionsType } from './books-actions';
 
 export const rootReducer = combineReducers({
   books: booksReducer,
