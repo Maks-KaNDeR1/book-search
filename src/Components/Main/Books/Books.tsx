@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { BookType } from '../../../api/api'
+import { BookType } from '../../../api/types'
 import { BooksReducerType } from '../../../store/books-reducer'
 import { AppRootStateType } from '../../../store/store'
 import styles from './Books.module.scss'
@@ -75,7 +75,9 @@ export const Books: React.FC<PropsType> = ({ booksReducer, sortedBooks, loadMore
                                 className="fa fa-refresh fa-spin"
                                 style={{ margin: "0 10px 0 0", fontSize: "18px" }}
                             />
-                        )} ADD BOOKS</button>
+                        )}
+                        ADD BOOKS
+                    </button>
                 </div>
             </div>
         </div>

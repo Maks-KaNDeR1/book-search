@@ -1,8 +1,9 @@
 import { AppRootStateType } from './store';
 import { Dispatch } from "redux";
-import { booksAPI, BookType } from "../api/api";
+import { booksAPI } from "../api/api";
 import { errorCode, errorMessage, setStatus } from "./app-reducer";
 import { addBooks, setBooks, setCategoriesBooks, setItemsTotalCount } from './books-actions';
+import { BookType } from '../api/types';
 
 
 const getBooksAPI = async (
@@ -12,7 +13,6 @@ const getBooksAPI = async (
     sorting?: string,
     startIndex?: number
 ) => {
-
     dispatch(setStatus(true))
     try {
         const res = await booksAPI.getVolumeBooks(value, sorting, startIndex)

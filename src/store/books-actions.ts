@@ -1,4 +1,4 @@
-import { BookType } from "../api/api";
+import { BookType } from "../api/types";
 
 
 export const setBooks = (books: BookType[]) =>

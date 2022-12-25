@@ -1,4 +1,4 @@
-import { BookType } from "../api/api";
+import { BookType } from "../api/types";
 import { BooksActionsType } from "./books-actions";
 
 let initialState = {

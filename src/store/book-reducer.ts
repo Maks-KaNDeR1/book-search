@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
-import { booksAPI, BookType } from "../api/api";
+import { booksAPI } from "../api/api";
+import { BookType } from "../api/types";
 import { setStatus } from "./app-reducer";
 
 let initialState = {

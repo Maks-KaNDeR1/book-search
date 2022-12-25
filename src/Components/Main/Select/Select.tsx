@@ -13,10 +13,9 @@ type PropsType = {
     handleSelectCategories: (categoriesValue: string) => void
 }
 
-export const Select: React.FC<PropsType> = (
-    {
-        sorting, categories, handleSelectSorting, handleSelectCategories
-    }) => {
+export const Select: React.FC<PropsType> = ({
+    sorting, categories, handleSelectSorting, handleSelectCategories
+}) => {
 
 
     const sortOptions: JSX.Element[] = sort.map((s, i) => (

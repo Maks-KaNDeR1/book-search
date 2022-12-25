@@ -29,10 +29,9 @@ export const DetailedBookInfo = () => {
                 <div className={styles.descriptionBlock}>
                     <div className={styles.authors}>
                         {
-                            b.volumeInfo?.authors?.length >= 1 ?
-                                b.volumeInfo.authors.map(a => <div>{a}</div>)
-                                :
-                                <div>{b.volumeInfo?.authors}</div>
+                            b.volumeInfo?.authors?.length >= 1
+                                ? b.volumeInfo.authors.map(a => <div>{a}</div>)
+                                : <div>{b.volumeInfo?.authors}</div>
                         }
                     </div>
                     <h3> {b.volumeInfo?.title} </h3>
